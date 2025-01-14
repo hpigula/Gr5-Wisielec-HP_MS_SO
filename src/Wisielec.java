@@ -1,16 +1,29 @@
 import java.util.Random;  // Importujemy klasę Random do losowania słów
 import java.util.Scanner; // Importujemy klasę Scanner do odczytywania danych wejściowych od użytkownika
-
+import java.util.*;
  public class Wisielec {
+     public static  Map<String, List<String>> categories = new HashMap<>();
 
+     static {
+         categories.put("Zwierzęta", Arrays.asList("lew", "słoń", "tygrys", "zebra", "żyrafa"));
+         categories.put("Owoce", Arrays.asList("jabłko", "banan", "pomarańcza", "truskawka", "winogrono"));
+         categories.put("Kolory", Arrays.asList("czerwony", "niebieski", "zielony", "żółty", "fioletowy"));
+         categories.put("Miasta", Arrays.asList("Warszawa", "Kraków", "Gdańsk", "Wrocław", "Poznań"));
+         categories.put("Sporty", Arrays.asList("piłka nożna", "koszykówka", "siatkówka", "tenis", "hokej"));
+     }
     // Tablica z przykładami słów, które będą wykorzystywane w grze
-    static String[] slowa = {"java", "programowanie", "komputer", "algorytm", "grafika", "sieci", "klepsydra"};
+    //static String[] slowa = {"java", "programowanie", "komputer", "algorytm", "grafika", "sieci", "klepsydra"};
 
     // Metoda, która losuje jedno słowo z powyższej tablicy
     public static String losujSlowo() {
-        Random rand = new Random(); // Tworzymy obiekt do losowania
+        Random rand = new Random();
+        List<String> categoryKeys = new ArrayList<>(categories.keySet());
+        String chosenCategory = categoryKeys.get(rand.nextInt(categoryKeys.size()));
+        List<String> slowo = categories.get(chosenCategory);
+         // Tworzymy obiekt do losowania
         // Losujemy indeks w tablicy słów i zwracamy odpowiednie słowo
-        return slowa[rand.nextInt(slowa.length)];
+
+        return new String[]{chosenCategory};
     }
 
     // Metoda rysująca wisielca w zależności od liczby błędów, które popełnił gracz
@@ -52,7 +65,7 @@ import java.util.Scanner; // Importujemy klasę Scanner do odczytywania danych w
         System.out.println("Sebastian Ormański, Łódź, Grupa 5, Wisielec, nr albumu 123888 ");
         System.out.println("Spróbuj odgadnąć słowo!");  // Instrukcja dla gracza
         System.out.println("Możesz zgadywać literę lub całe słowo słowa są podane małymi literami.");  // Dalsze instrukcje dla gracza
-
+        System.out.println("\nkategoria:" + categories.containsKey(categories));
         // Główna pętla gry, która trwa dopóki graTrwa jest prawdą i użytkownik nie popełni 6 błędów
         while (graTrwa && bledy < 6) {
             // Wyświetlamy aktualny stan zgadywanego słowa z literami i niewiadomymi
@@ -79,6 +92,7 @@ import java.util.Scanner; // Importujemy klasę Scanner do odczytywania danych w
                 }
             } else if (input.length() == 1) {
                 // Jeśli użytkownik podał tylko jedną literę
+
                 char litera = input.charAt(0);  // Pobieramy pierwszą literę z wprowadzonego ciągu
                 boolean trafiona = false;  // Flaga, która oznacza, czy litera została znaleziona w słowie
 
