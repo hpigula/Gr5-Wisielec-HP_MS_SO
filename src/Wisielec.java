@@ -7,11 +7,16 @@ public class Wisielec {
 
     // Inicjalizacja kategorii i słów
     static {
-        categories.put("Zwierzęta", Arrays.asList("lew", "słoń", "tygrys", "zebra", "żyrafa"));
-        categories.put("Owoce", Arrays.asList("jabłko", "banan", "pomarańcza", "truskawka", "winogrono"));
-        categories.put("Kolory", Arrays.asList("czerwony", "niebieski", "zielony", "żółty", "fioletowy"));
-        categories.put("Miasta", Arrays.asList("Warszawa", "Kraków", "Gdańsk", "Wrocław", "Poznań"));
-        categories.put("Sporty", Arrays.asList("piłka nożna", "koszykówka", "siatkówka", "tenis", "hokej"));
+        categories.put("Zwierzęta", Arrays.asList("lew", "słoń", "tygrys", "zebra", "żyrafa", "wilk", "lis", "niedźwiedź", "kangur", "koala"));
+        categories.put("Owoce", Arrays.asList("jabłko", "banan", "pomarańcza", "truskawka", "winogrono", "gruszka", "ananas", "kiwi", "malina", "brzoskwinia"));
+        categories.put("Kolory", Arrays.asList("czerwony", "niebieski", "zielony", "żółty", "fioletowy", "pomarańczowy", "różowy", "brązowy", "czarny", "biały"));
+        categories.put("Miasta", Arrays.asList("Warszawa", "Kraków", "Gdańsk", "Wrocław", "Poznań", "Łódź", "Szczecin", "Lublin", "Katowice", "Bydgoszcz"));
+        categories.put("Sporty", Arrays.asList("piłka nożna", "koszykówka", "siatkówka", "tenis", "hokej", "bieganie", "pływanie", "kolarstwo", "golf", "boks"));
+        categories.put("Pojazdy", Arrays.asList("samochód", "rower", "motocykl", "pociąg", "samolot", "statek", "autobus", "tramwaj", "hulajnoga", "ciężarówka"));
+        categories.put("Warzywa", Arrays.asList("marchew", "ziemniak", "pomidor", "ogórek", "papryka", "cebula", "czosnek", "brokuł", "kalafior", "sałata"));
+        categories.put("Zawody", Arrays.asList("lekarz", "nauczyciel", "inżynier", "prawnik", "kucharz", "mechanik", "architekt", "policjant", "strażak", "muzyk"));
+        categories.put("Kraje", Arrays.asList("Polska", "Niemcy", "Francja", "Hiszpania", "Włochy", "USA", "Kanada", "Australia", "Japonia", "Chiny"));
+        categories.put("Instrumenty", Arrays.asList("gitara", "pianino", "skrzypce", "trąbka", "flet", "perkusja", "saksofon", "harfa", "akordeon", "mandolina"));
     }
 
     // Losowanie kategorii i słowa
@@ -49,9 +54,10 @@ public class Wisielec {
         int bledy = 0;
         boolean graTrwa = true;
 
-        System.out.println("Sebastian Ormański, Łódź, Grupa 5, Wisielec, nr albumu 123888 ");
-        System.out.println("Spróbuj odgadnąć słowo! Możesz zgadywać literę lub całe słowo.");
+        System.out.println("\nAutorzy: Sebastian Ormański, Horacy Piguła, Mateusz Serowik, Jakub Szymański ");
+        System.out.println("\nSpróbuj odgadnąć słowo! Możesz zgadywać literę lub całe słowo.");
         System.out.println("Kategoria: " + kategoria);
+
 
         while (graTrwa && bledy < 6) {
             System.out.println("\nSłowo do zgadnięcia: " + new String(zgadnieteSlowo));
