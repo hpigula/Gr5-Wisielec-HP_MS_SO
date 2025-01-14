@@ -1,147 +1,113 @@
-import java.util.Random;  // Importujemy klasę Random do losowania słów
-import java.util.Scanner; // Importujemy klasę Scanner do odczytywania danych wejściowych od użytkownika
+import java.util.Random;
+import java.util.Scanner;
 import java.util.*;
- public class Wisielec {
-     public static  Map<String, List<String>> categories = new HashMap<>();
 
-     static {
-         categories.put("Zwierzęta", Arrays.asList("lew", "słoń", "tygrys", "zebra", "żyrafa"));
-         categories.put("Owoce", Arrays.asList("jabłko", "banan", "pomarańcza", "truskawka", "winogrono"));
-         categories.put("Kolory", Arrays.asList("czerwony", "niebieski", "zielony", "żółty", "fioletowy"));
-         categories.put("Miasta", Arrays.asList("Warszawa", "Kraków", "Gdańsk", "Wrocław", "Poznań"));
-         categories.put("Sporty", Arrays.asList("piłka nożna", "koszykówka", "siatkówka", "tenis", "hokej"));
-     }
-    // Tablica z przykładami słów, które będą wykorzystywane w grze
-    //static String[] slowa = {"java", "programowanie", "komputer", "algorytm", "grafika", "sieci", "klepsydra"};
+public class Wisielec {
+    public static Map<String, List<String>> categories = new HashMap<>();
 
-    // Metoda, która losuje jedno słowo z powyższej tablicy
-    public static String losujSlowo() {
+    // Inicjalizacja kategorii i słów
+    static {
+        categories.put("Zwierzęta", Arrays.asList("lew", "słoń", "tygrys", "zebra", "żyrafa"));
+        categories.put("Owoce", Arrays.asList("jabłko", "banan", "pomarańcza", "truskawka", "winogrono"));
+        categories.put("Kolory", Arrays.asList("czerwony", "niebieski", "zielony", "żółty", "fioletowy"));
+        categories.put("Miasta", Arrays.asList("Warszawa", "Kraków", "Gdańsk", "Wrocław", "Poznań"));
+        categories.put("Sporty", Arrays.asList("piłka nożna", "koszykówka", "siatkówka", "tenis", "hokej"));
+    }
+
+    // Losowanie kategorii i słowa
+    public static Map.Entry<String, String> losujKategorieISlowo() {
         Random rand = new Random();
         List<String> categoryKeys = new ArrayList<>(categories.keySet());
         String chosenCategory = categoryKeys.get(rand.nextInt(categoryKeys.size()));
-        List<String> slowo = categories.get(chosenCategory);
-         // Tworzymy obiekt do losowania
-        // Losujemy indeks w tablicy słów i zwracamy odpowiednie słowo
-
-        return new String[]{chosenCategory};
+        List<String> words = categories.get(chosenCategory);
+        String chosenWord = words.get(rand.nextInt(words.size()));
+        return new AbstractMap.SimpleEntry<>(chosenCategory, chosenWord);
     }
 
-    // Metoda rysująca wisielca w zależności od liczby błędów, które popełnił gracz
+    // Rysowanie wisielca
     public static void rysujWisielca(int bledy) {
-        // W zależności od liczby błędów, rysujemy kolejne etapy wisielca
         switch (bledy) {
-            case 0:
-                System.out.println("  -----"); break;  // Brak błędów - tylko linia bazowa
-            case 1:
-                System.out.println("  -----\n  |   |"); break;  // 1 błąd - głowa
-            case 2:
-                System.out.println("  -----\n  |   |\n  O"); break;  // 2 błędy - dodajemy głowę
-            case 3:
-                System.out.println("  -----\n  |   |\n  O\n  |"); break;  // 3 błędy - rysujemy ciało
-            case 4:
-                System.out.println("  -----\n  |   |\n  O\n /|"); break;  // 4 błędy - rysujemy jedną rękę
-            case 5:
-                System.out.println("  -----\n  |   |\n  O\n /|\\" ); break;  // 5 błędów - rysujemy drugą rękę
-            case 6:
-                System.out.println("  -----\n  |   |\n  O\n /|\\\n / \\"); break;  // 6 błędów - rysujemy nogi, koniec gry
+            case 0 -> System.out.println("  -----");
+            case 1 -> System.out.println("  -----\n  |   |");
+            case 2 -> System.out.println("  -----\n  |   |\n  O");
+            case 3 -> System.out.println("  -----\n  |   |\n  O\n  |");
+            case 4 -> System.out.println("  -----\n  |   |\n  O\n /|");
+            case 5 -> System.out.println("  -----\n  |   |\n  O\n /|\\");
+            case 6 -> System.out.println("  -----\n  |   |\n  O\n /|\\\n / \\");
         }
     }
 
-    // Główna metoda odpowiedzialna za rozpoczęcie gry
+    // Rozpoczęcie gry
     public static void rozpocznijGre() {
-        Scanner scanner = new Scanner(System.in); // Tworzymy obiekt scanner do wczytywania danych wejściowych
+        Scanner scanner = new Scanner(System.in);
+        Map.Entry<String, String> kategoriaISlowo = losujKategorieISlowo();
+        String kategoria = kategoriaISlowo.getKey();
+        String slowo = kategoriaISlowo.getValue();
+        char[] zgadnieteSlowo = new char[slowo.length()];
+        Arrays.fill(zgadnieteSlowo, '_');
 
-        // Losowanie słowa, które użytkownik będzie musiał odgadnąć
-        String slowo = losujSlowo(); // Losujemy jedno słowo
-        char[] zgadnieteSlowo = new char[slowo.length()];  // Tablica do przechowywania odgadniętych liter
+        int bledy = 0;
+        boolean graTrwa = true;
 
-        // Ustawiamy wszystkie litery w zgadywanym słowie na '_', które będzie widoczne dla gracza
-        for (int i = 0; i < slowo.length(); i++) {
-            zgadnieteSlowo[i] = '_'; // Na początku wszystkie litery są nieodgadnięte, więc ustawiamy '_'
-        }
-
-        int bledy = 0; // Zmienna do liczenia błędów użytkownika
-        boolean graTrwa = true;  // Flaga, która kontroluje, czy gra nadal trwa
         System.out.println("Sebastian Ormański, Łódź, Grupa 5, Wisielec, nr albumu 123888 ");
-        System.out.println("Spróbuj odgadnąć słowo!");  // Instrukcja dla gracza
-        System.out.println("Możesz zgadywać literę lub całe słowo słowa są podane małymi literami.");  // Dalsze instrukcje dla gracza
-        System.out.println("\nkategoria:" + categories.containsKey(categories));
-        // Główna pętla gry, która trwa dopóki graTrwa jest prawdą i użytkownik nie popełni 6 błędów
+        System.out.println("Spróbuj odgadnąć słowo! Możesz zgadywać literę lub całe słowo.");
+        System.out.println("Kategoria: " + kategoria);
+
         while (graTrwa && bledy < 6) {
-            // Wyświetlamy aktualny stan zgadywanego słowa z literami i niewiadomymi
             System.out.println("\nSłowo do zgadnięcia: " + new String(zgadnieteSlowo));
             System.out.print("Podaj literę lub całe słowo: ");
-            String input = scanner.next();  // Wczytujemy dane wejściowe od użytkownika
+            String input = scanner.next();
 
-            // Sprawdzamy, czy użytkownik podał całe słowo
-            if (input.length() > 1) {
-                // Jeśli długość wpisanego słowa zgadza się z długością ukrytego słowa
-                if (input.length() == slowo.length()) {
-                    // Jeśli użytkownik odgadł całe słowo, porównujemy je z rzeczywistym słowem
-                    if (input.equalsIgnoreCase(slowo)) {
-                        System.out.println("\nGratulacje! Odgadłeś słowo: " + slowo);
-                        graTrwa = false;  // Kończymy grę, bo użytkownik odgadł słowo
-                    } else {
-                        System.out.println("Niestety, to nie jest poprawne słowo.");
-                        bledy++;  // Zwiększamy liczbę błędów, ponieważ odgadnięte słowo było niepoprawne
-                        rysujWisielca(bledy);  // Rysujemy etap wisielca zależnie od liczby błędów
-                    }
+            if (input.length() > 1) { // Sprawdzanie całego słowa
+                if (input.equalsIgnoreCase(slowo)) {
+                    System.out.println("\nGratulacje! Odgadłeś słowo: " + slowo);
+                    graTrwa = false;
                 } else {
-                    // Jeśli długość wpisanego słowa nie zgadza się z długością ukrytego słowa
-                    System.out.println("Słowo musi mieć długość " + slowo.length() + " liter.");
+                    System.out.println("Niestety, to nie jest poprawne słowo.");
+                    bledy++;
+                    rysujWisielca(bledy);
                 }
-            } else if (input.length() == 1) {
-                // Jeśli użytkownik podał tylko jedną literę
+            } else { // Sprawdzanie jednej litery
+                char litera = input.charAt(0);
+                boolean trafiona = false;
 
-                char litera = input.charAt(0);  // Pobieramy pierwszą literę z wprowadzonego ciągu
-                boolean trafiona = false;  // Flaga, która oznacza, czy litera została znaleziona w słowie
-
-                // Sprawdzamy, czy litera występuje w ukrytym słowie
                 for (int i = 0; i < slowo.length(); i++) {
-                    if (slowo.charAt(i) == litera) {  // Jeśli litera występuje na danej pozycji
-                        zgadnieteSlowo[i] = litera;  // Zaktualizuj zgadywane słowo w tej pozycji
-                        trafiona = true;  // Zmieniamy flagę na true, bo litera była trafiona
+                    if (String.valueOf(slowo.charAt(i)).equalsIgnoreCase(String.valueOf(litera))) {
+                        zgadnieteSlowo[i] = slowo.charAt(i); // Zachowujemy oryginalną wielkość litery
+                        trafiona = true;
                     }
                 }
 
-                // Jeśli litera nie została trafiona
                 if (!trafiona) {
-                    bledy++;  // Zwiększamy liczbę błędów
-                    rysujWisielca(bledy);  // Rysujemy kolejny etap wisielca
+                    System.out.println("Brak litery " + litera + " w słowie.");
+                    bledy++;
+                    rysujWisielca(bledy);
                 }
-            } else {
-                // Jeśli użytkownik podał coś, co nie jest ani literą, ani słowem
-                System.out.println("Proszę wpisać tylko jedną literę lub całe słowo.");
             }
 
-            // Sprawdzamy, czy użytkownik odgadł całe słowo
-            if (new String(zgadnieteSlowo).equals(slowo)) {
+            if (new String(zgadnieteSlowo).equalsIgnoreCase(slowo)) {
                 System.out.println("\nGratulacje! Odgadłeś słowo: " + slowo);
-                graTrwa = false;  // Kończymy grę, ponieważ użytkownik odgadł całe słowo
+                graTrwa = false;
             }
         }
 
-        // Jeśli użytkownik popełnił 6 błędów, kończymy grę
         if (bledy == 6) {
             System.out.println("\nPrzegrałeś! Słowo to było: " + slowo);
         }
 
-        // Po zakończeniu gry pytamy, czy użytkownik chce zagrać ponownie
         System.out.println("\nNaciśnij Enter, aby zagrać ponownie, lub wpisz 'exit', aby zakończyć grę.");
-        Scanner scanner2 = new Scanner(System.in);  // Tworzymy drugi scanner, aby wczytać odpowiedź
-        String odp = scanner2.nextLine();  // Wczytujemy odpowiedź użytkownika
+        scanner.nextLine(); // Wyczyść bufor
+        String odp = scanner.nextLine();
 
-        if (odp.equalsIgnoreCase("exit")) {  // Jeśli użytkownik chce zakończyć
-            System.out.println("Dziękujemy za grę!");  // Pożegnanie
+        if (odp.equalsIgnoreCase("exit")) {
+            System.out.println("Dziękujemy za grę!");
         } else {
-            // Jeśli użytkownik chce zagrać ponownie, uruchamiamy nową grę
             rozpocznijGre();
         }
-
     }
 
-    // Metoda główna, która uruchamia grę
+    // Metoda główna
     public static void main(String[] args) {
-        rozpocznijGre();  // Rozpoczynamy pierwszą grę
+        rozpocznijGre();
     }
 }
