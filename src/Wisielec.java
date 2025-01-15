@@ -4,6 +4,12 @@ import java.util.*;
 
 public class Wisielec {
     public static Map<String, List<String>> categories = new HashMap<>();
+    public static final String RESET = "\u001B[0m"; //Dodanie kolorów w celu poprawy czytelności
+    public static final String RED = "\033[1;31m";
+    public static final String GREEN = "\033[1;32m";
+    public static final String YELLOW = "\033[1;93m";
+    public static final String WHITE = "\033[1;97m";
+    public static final String BLUE = "\033[1;34m";
 
     // Inicjalizacja kategorii i słów
     static {
@@ -32,13 +38,13 @@ public class Wisielec {
     // Rysowanie wisielca
     public static void rysujWisielca(int bledy) {
         switch (bledy) {
-            case 0 -> System.out.println("  -----");
-            case 1 -> System.out.println("  -----\n  |   |");
-            case 2 -> System.out.println("  -----\n  |   |\n  O");
-            case 3 -> System.out.println("  -----\n  |   |\n  O\n  |");
-            case 4 -> System.out.println("  -----\n  |   |\n  O\n /|");
-            case 5 -> System.out.println("  -----\n  |   |\n  O\n /|\\");
-            case 6 -> System.out.println("  -----\n  |   |\n  O\n /|\\\n / \\");
+            case 0 -> System.out.println(YELLOW + "  -----" + RESET);
+            case 1 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET);
+            case 2 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET + WHITE + "\n  O" + RESET);
+            case 3 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET + WHITE +"\n  O\n"+ RESET + GREEN +"  |" + RESET);
+            case 4 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET + WHITE +"\n  O\n"+ RESET + GREEN +" /|"+ RESET);
+            case 5 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET + WHITE +"\n  O\n"+ RESET + GREEN +" /|\\" + RESET);
+            case 6 -> System.out.println(YELLOW + "  -----\n  |   |" + RESET + WHITE +"\n  O\n"+ RESET + GREEN +" /|\\\n"+ RESET + BLUE +" / \\" + RESET);
         }
     }
 
@@ -53,7 +59,6 @@ public class Wisielec {
 
         int bledy = 0;
         boolean graTrwa = true;
-
         System.out.println("\nAutorzy: Sebastian Ormański, Horacy Piguła, Mateusz Serowik, Jakub Szymański ");
         System.out.println("\nSpróbuj odgadnąć słowo! Możesz zgadywać literę lub całe słowo.");
         System.out.println("Kategoria: " + kategoria);
@@ -66,10 +71,10 @@ public class Wisielec {
 
             if (input.length() > 1) { // Sprawdzanie całego słowa
                 if (input.equalsIgnoreCase(slowo)) {
-                    System.out.println("\nGratulacje! Odgadłeś słowo: " + slowo);
+                    System.out.println(GREEN + "\nGratulacje! Odgadłeś słowo: " + slowo + RESET);
                     graTrwa = false;
                 } else {
-                    System.out.println("Niestety, to nie jest poprawne słowo.");
+                    System.out.println(RED + "Niestety, to nie jest poprawne słowo." + RESET);
                     bledy++;
                     rysujWisielca(bledy);
                 }
@@ -85,20 +90,20 @@ public class Wisielec {
                 }
 
                 if (!trafiona) {
-                    System.out.println("Brak litery " + litera + " w słowie.");
+                    System.out.println(RED +"Brak litery " + litera + " w słowie."+ RESET);
                     bledy++;
                     rysujWisielca(bledy);
                 }
             }
 
             if (new String(zgadnieteSlowo).equalsIgnoreCase(slowo)) {
-                System.out.println("\nGratulacje! Odgadłeś słowo: " + slowo);
+                System.out.println(GREEN + "\nGratulacje! Odgadłeś słowo: " + slowo + RESET);
                 graTrwa = false;
             }
         }
 
         if (bledy == 6) {
-            System.out.println("\nPrzegrałeś! Słowo to było: " + slowo);
+            System.out.println(RED + "\nPrzegrałeś! Słowo to było: " + slowo + RESET);
         }
 
         System.out.println("\nNaciśnij Enter, aby zagrać ponownie, lub wpisz 'exit', aby zakończyć grę.");
